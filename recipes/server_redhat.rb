@@ -55,7 +55,7 @@ end
 # The systemd unit file does not support 'initdb' or 'upgrade' actions.
 # Use the postgresql-setup script instead.
 
-unless platform_family?("fedora") and node['platform_version'].to_i >= 16
+unless (platform_family?("fedora") and node['platform_version'].to_i >= 16) or (platform_family?("centos") and node['platform_version'].to_i >= 7)
 
   directory "/etc/sysconfig/pgsql" do
     mode "0644"
@@ -71,7 +71,7 @@ unless platform_family?("fedora") and node['platform_version'].to_i >= 16
 
 end
 
-if platform_family?("fedora") and node['platform_version'].to_i >= 16
+if (platform_family?("fedora") and node['platform_version'].to_i >= 16) or (platform_family?("centos") and node['platform_version'].to_i >= 7)
 
   execute "postgresql-setup initdb #{svc_name}" do
     not_if { ::FileTest.exist?(File.join(dir, "PG_VERSION")) }
